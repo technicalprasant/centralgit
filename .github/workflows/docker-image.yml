@@ -1,0 +1,20 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag prasant12345/docker-image-autobuild:latest
+    - name: push the docker image
+     run: docker login -u prasant12345 -p ${{secrets.Docker_token}} && docker push prasant12345/docker-image-autobuild:latest

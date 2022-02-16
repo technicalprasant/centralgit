@@ -1,0 +1,22 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: |
+      
+echo "${{ secrets.DOCKERTOKEN}}" | docker login -u "${{ secrets.DOCKERUSER }}" --password-stdin docker.io
+        docker build . --file Dockerfile --tag docker.io/${{ secrets.DOCKERUSER }}/${{ secrets.DOCKERREPO }}:$GITHUB_SHA
+        docker push docker.io/${{ secrets.DOCKERUSER }}/${{ secrets.DOCKERREPO }}:$GITHUB_SHA
